@@ -19,11 +19,8 @@ values ('Над осевшими могилами', 4, 2, 3),
 ('Spring в действии', 1, 1, 5),
 ('Java в облаке', 2, 1, 3);
 
-insert into comments(comment_book)
-values ('comment_book_01'), ('comment_book_02'), ('comment_book_03'), ('comment_book_04');
-
-insert into book_comments(book_id, comment_id)
-values (1, 1),   (1, 2),   (1, 3),
-       (2, 1),   (2, 2),   (2, 4),
-       (3, 3),   (3, 2),   (3, 1),
-       (4, 3),   (4, 1),   (4, 4);
+insert into comments(comment_book, book_id)
+values  ('Книга понравилась', 3), ('Стоит читать', 3),
+        ('Книга понравилась', 4), ('Было интересно', 4), ('Стоит читать', 4),
+        ('Было интересно', 1), ('Не стоит читать', 1),
+        ('Было интересно', 2), ('Стоит читать', 2);

@@ -114,8 +114,8 @@ public class ApplicationShellCommands {
 
     @ShellMethod(value = "Update comment by id", key = {"update-comment", "UC"})
     public void updateCommentById(@ShellOption long id,
-                                  @ShellOption String title) {
-        commentService.updateCommentById(id, title);
+                                  @ShellOption String titleComment) {
+        commentService.updateCommentById(id, titleComment);
     }
 
     @ShellMethod(value = "Delete comment by id", key = {"delete-comment", "DC"})

@@ -15,8 +15,8 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 class CommentDaoTest {
 
     private static final long FIRST_COMMENT_ID = 1;
-    private static final String FIRST_COMMENT_FIRST_NAME = "comment_book_01";
-    private static final int COMMENT_COUNT = 4;
+    private static final String FIRST_COMMENT_FIRST_NAME = "Книга понравилась";
+    private static final int COMMENT_COUNT = 9;
 
     @Autowired
     private CommentDao commentDao;

@@ -36,11 +36,9 @@ public class Book {
     @Column(name = "amount", nullable = false)
     private int amount;
 
-    @Fetch(FetchMode.SELECT)
+    @OneToMany(fetch = FetchType.LAZY)
     @BatchSize(size = 20)
-    @ManyToMany(targetEntity = Comment.class, fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinTable(name = "book_comments", joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "comment_id", referencedColumnName = "id"))
+    @JoinColumn(name = "book_id", referencedColumnName = "id")
     private List<Comment> comments;
 
     public Book(String title, Author author, Genre genre, int amount) {
