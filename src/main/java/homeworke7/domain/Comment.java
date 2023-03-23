@@ -21,9 +21,6 @@ public class Comment {
     @Column(name = "comment_book")
     private String comment;
 
-    @ManyToMany(mappedBy = "comments")
-    private List<Book> books;
-
     public Comment(String comment) {
         this.comment = comment;
     }
