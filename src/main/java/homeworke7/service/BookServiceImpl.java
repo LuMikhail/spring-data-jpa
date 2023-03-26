@@ -6,11 +6,10 @@ import homeworke7.dao.CommentDao;
 import homeworke7.dao.GenreDao;
 import homeworke7.domain.Author;
 import homeworke7.domain.Book;
-import homeworke7.domain.Comment;
 import homeworke7.domain.Genre;
-import org.springframework.transaction.annotation.Transactional;;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +24,7 @@ public class BookServiceImpl implements BookService {
     private final CommentDao commentDao;
 
     @Override
+    @Transactional
     public void insertBook(String title, long idAuthor, long idGenre, int amount) {
         bookDao.save(new Book(title, new Author(idAuthor), new Genre(idGenre), amount));
     }
@@ -32,19 +32,12 @@ public class BookServiceImpl implements BookService {
     @Override
     @Transactional
     public Book assignCommentToBook(Long bookId, Long commentId) {
-        Optional<Book> bookOptional = bookDao.findById(bookId);
-        if (bookOptional.isPresent()) {
-            Book book = bookOptional.get();
-            Optional<Comment> commentOptional = commentDao.findById(commentId);
-            if (commentOptional.isPresent()) {
-                Comment comment = commentOptional.get();
-                List<Comment> commentList = book.getComments();
-                commentList.add(comment);
-                book.setComments(commentList);
-                return bookDao.save(book);
-            }
-        }
-        return null;
+        return bookDao.findById(bookId)
+                .map(book -> {
+                    commentDao.findById(commentId).ifPresent(e -> book.getComments().add(e));
+                    return bookDao.save(book);
+                })
+                .orElse(null);
     }
 
     @Override
@@ -54,7 +47,6 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<Book> findAllBooks() {
         return bookDao.findAll();
     }
@@ -70,22 +62,17 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    @Transactional
     public void updateBookById(long bookId, String title, long authorId, long genreId, int amount) {
-        Optional<Book> book = bookDao.findById(bookId);
-        Optional<Author> author = authorDao.findById(authorId);
-        Optional<Genre> genre = genreDao.findById(genreId);
-        book.ifPresent(updateBook -> {
-            updateBook.setTitle(title);
-            updateBook.setAuthor(author.get());
-            updateBook.setGenre(genre.get());
-            updateBook.setAmount(amount);
-            bookDao.save(updateBook);
+        bookDao.findById(bookId).ifPresent(book -> {
+            authorDao.findById(authorId).ifPresent(book::setAuthor);
+            genreDao.findById(genreId).ifPresent(book::setGenre);
+            book.setTitle(title);
+            book.setAmount(amount);
+            bookDao.save(book);
         });
     }
 
     @Override
-    @Transactional
     public void deleteBooksById(long id) {
         bookDao.deleteById(id);
     }

@@ -4,9 +4,9 @@ import homeworke7.dao.BookDao;
 import homeworke7.dao.CommentDao;
 import homeworke7.domain.Book;
 import homeworke7.domain.Comment;
-import org.springframework.transaction.annotation.Transactional;;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,11 +26,6 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Comment> findAllComments() {
-       return commentDao.findAll();
-    }
-
-    @Override
     public Optional<Comment> findCommentById(long id) {
         return commentDao.findById(id);
     }
@@ -49,13 +44,14 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    @Transactional
     public void updateCommentById(long id, String comment) {
-        commentDao.updateCommentById(id, comment);
+        commentDao.findById(id).ifPresent(updateComment -> {
+            updateComment.setComment(comment);
+            commentDao.save(updateComment);
+        });
     }
 
     @Override
-    @Transactional
     public void deleteCommentById(long id) {
         commentDao.deleteById(id);
     }

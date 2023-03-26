@@ -1,6 +1,5 @@
 package homeworke7.shell;
 
-import homeworke7.domain.Book;
 import homeworke7.service.AuthorService;
 import homeworke7.service.BookService;
 import homeworke7.service.CommentService;
@@ -21,8 +20,8 @@ public class ApplicationShellCommands {
     @ShellMethod(value = "Find all books", key = {"find-all-books", "AB"})
     public void findAllBooks() {
         bookService.findAllBooks().forEach(book ->
-                System.out.printf("%s название: %s, автор: %s, жанр: %s, количество: %s\n\t, комментарий: %s \n",
-                        book.getId(), book.getTitle(), book.getAuthor(), book.getGenre(), book.getAmount(), book.getComments()));
+                System.out.printf("%s название: %s, автор: %s, жанр: %s, количество: %s\n",
+                        book.getId(), book.getTitle(), book.getAuthor(), book.getGenre(), book.getAmount()));
 
     }
 
@@ -31,13 +30,6 @@ public class ApplicationShellCommands {
         authorService.findAllAuthors().forEach(author ->
                 System.out.printf("%s , автор: %s\n",
                         author.getId(), author.getName()));
-    }
-
-    @ShellMethod(value = "Find all comments", key = {"find-all-comments", "AC"})
-    public void findAllComments() {
-        commentService.findAllComments().forEach(comment ->
-                System.out.printf("%s , комментарий: %s\n",
-                        comment.getId(), comment.getComment()));
     }
 
     @ShellMethod(value = "Find all genres", key = {"find-all-genre", "AG"})
@@ -63,15 +55,16 @@ public class ApplicationShellCommands {
 
     @ShellMethod(value = "Find comment by id", key = {"find-comment-by-id", "C"})
     public void findCommentById(@ShellOption long commentId) {
-        String comment = commentService.findCommentById(commentId).get().getComment();
-        System.out.printf("%s комментарий: %s\n", commentId, comment);
+        commentService.findCommentById(commentId).ifPresent(comment ->
+                System.out.printf("%s комментарий: %s, относится к книге %s\n",
+                        comment.getId(), comment.getComment(), comment.getBook().getTitle()));
     }
 
     @ShellMethod(value = "Find book by id", key = {"find-book-by-id", "B"})
     public void findBookById(@ShellOption long bookId) {
-        Book book = bookService.findBookById(bookId).get();
-        System.out.printf("%s название: %s, автор: %s, жанр: %s, количество: %s\n",
-                book.getId(), book.getTitle(), book.getAuthor().getName(), book.getGenre().getGenre(), book.getAmount());
+        bookService.findBookById(bookId).ifPresent(book ->
+                System.out.printf("%s название: %s, автор: %s, жанр: %s, количество: %s\n",
+                        book.getId(), book.getTitle(), book.getAuthor().getName(), book.getGenre().getGenre(), book.getAmount()));
     }
 
     @ShellMethod(value = "Find comments by book id", key = {"find-comments-by-book-id", "CB"})

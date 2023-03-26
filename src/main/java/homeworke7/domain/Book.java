@@ -2,25 +2,32 @@ package homeworke7.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.BatchSize;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 import java.util.List;
+import java.util.Objects;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "book")
-@NamedEntityGraph(name = "Book.book-all-entity-graph", includeAllAttributes = true)
+@NamedEntityGraph(name = "book-entity-graph", attributeNodes = {@NamedAttributeNode("author"),
+        @NamedAttributeNode("genre")})
 public class Book {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, author, genre, amount, comments);
+    }
 
     @Column(name = "title", nullable = false)
     private String title;
@@ -36,9 +43,8 @@ public class Book {
     @Column(name = "amount", nullable = false)
     private int amount;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "book", fetch = FetchType.LAZY)
     @BatchSize(size = 20)
-    @JoinColumn(name = "book_id", referencedColumnName = "id")
     private List<Comment> comments;
 
     public Book(String title, Author author, Genre genre, int amount) {
@@ -47,4 +53,15 @@ public class Book {
         this.genre = genre;
         this.amount = amount;
     }
+
+    @Override
+    public String toString() {
+        return String.format("Book(id=%s ,title=%s ,author=%s ,genre=%s ,amount=%s)",
+                this.id,
+                this.title,
+                this.author,
+                this.genre,
+                this.amount);
+    }
 }
+

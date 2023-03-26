@@ -16,7 +16,4 @@ public interface CommentService {
     void updateCommentById(long id, String comment);
 
     void deleteCommentById(long id);
-
-    List<Comment> findAllComments();
-
 }

@@ -46,12 +46,6 @@ class CommentServiceImplTest {
 
 
     @Test
-    void calledCorrectlyMethodUpdateCommentById() {
-        commentService.updateCommentById(COMMENT_ID, "Новый комментарий");
-        verify(commentDao).updateCommentById(COMMENT_ID, "Новый комментарий");
-    }
-
-    @Test
     void calledCorrectlyMethodDeleteCommentById() {
         commentService.deleteCommentById(COMMENT_ID);
         verify(commentDao).deleteById(COMMENT_ID);

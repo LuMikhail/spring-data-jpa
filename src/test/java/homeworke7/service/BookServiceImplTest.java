@@ -41,7 +41,7 @@ class BookServiceImplTest {
 
     @Test
     void calledCorrectlyMethodInsertBook() {
-        Book book = new Book(0, "Скриба", new Author(3L), new Genre(2L), 3, null);
+        Book book = new Book("Скриба", new Author(3L), new Genre(2L), 3);
         bookService.insertBook("Скриба", 3, 2, 3);
         verify(bookDao).save(book);
     }
