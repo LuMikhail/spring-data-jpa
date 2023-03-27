@@ -4,7 +4,6 @@ import homeworke7.dao.AuthorDao;
 import homeworke7.domain.Author;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -15,7 +14,6 @@ public class AuthorServiceImpl implements AuthorService {
     private final AuthorDao authorDao;
 
     @Override
-    @Transactional
     public void insertAuthor(String name) {
         authorDao.save(new Author(name));
     }

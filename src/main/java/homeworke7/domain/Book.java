@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.BatchSize;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
@@ -16,8 +15,6 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "book")
-@NamedEntityGraph(name = "book-entity-graph", attributeNodes = {@NamedAttributeNode("author"),
-        @NamedAttributeNode("genre")})
 public class Book {
 
     @Id
@@ -27,11 +24,11 @@ public class Book {
     @Column(name = "title", nullable = false)
     private String title;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id", referencedColumnName = "id")
     private Author author;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "genre_id", referencedColumnName = "id")
     private Genre genre;
 

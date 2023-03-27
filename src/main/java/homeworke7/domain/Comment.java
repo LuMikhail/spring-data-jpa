@@ -35,8 +35,9 @@ public class Comment {
 
     @Override
     public String toString() {
-        return String.format("Comment(id=%s ,comment=%s)",
+        return String.format("Comment(id=%s ,comment=%s ,book=%s)",
                 this.id,
-                this.comment);
+                this.comment,
+                this.book);
     }
 }

@@ -19,7 +19,6 @@ public class CommentServiceImpl implements CommentService {
     private final BookDao bookDao;
 
     @Override
-    @Transactional
     public void insertComment(String comment) {
         commentDao.save(new Comment(comment));
     }

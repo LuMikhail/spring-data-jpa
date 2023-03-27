@@ -6,6 +6,7 @@ import homeworke7.dao.CommentDao;
 import homeworke7.dao.GenreDao;
 import homeworke7.domain.Author;
 import homeworke7.domain.Book;
+import homeworke7.domain.Comment;
 import homeworke7.domain.Genre;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,6 @@ public class BookServiceImpl implements BookService {
     private final CommentDao commentDao;
 
     @Override
-    @Transactional
     public void insertBook(String title, long idAuthor, long idGenre, int amount) {
         bookDao.save(new Book(title, new Author(idAuthor), new Genre(idGenre), amount));
     }
@@ -32,12 +32,14 @@ public class BookServiceImpl implements BookService {
     @Override
     @Transactional
     public Book assignCommentToBook(Long bookId, Long commentId) {
-        return bookDao.findById(bookId)
-                .map(book -> {
-                    commentDao.findById(commentId).ifPresent(e -> book.getComments().add(e));
-                    return bookDao.save(book);
-                })
-                .orElse(null);
+        Comment comment = commentDao.findById(commentId)
+                .orElseThrow(() -> new IllegalArgumentException("Comment not found with id: " + commentId));
+        Book book = bookDao.findById(bookId)
+                .orElseThrow(() -> new IllegalArgumentException("Book not found with id: " + bookId));
+        comment.setBook(book);
+        book.getComments().add(comment);
+        bookDao.save(book);
+        return book;
     }
 
     @Override
