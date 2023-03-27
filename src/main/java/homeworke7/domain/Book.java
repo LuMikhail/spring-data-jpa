@@ -6,9 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.BatchSize;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
-import java.util.Objects;
 
 @Getter
 @Setter
@@ -23,11 +23,6 @@ public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, title, author, genre, amount, comments);
-    }
 
     @Column(name = "title", nullable = false)
     private String title;
