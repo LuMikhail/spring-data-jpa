@@ -38,8 +38,7 @@ public class BookServiceImpl implements BookService {
                 .orElseThrow(() -> new IllegalArgumentException("Book not found with id: " + bookId));
         comment.setBook(book);
         book.getComments().add(comment);
-        bookDao.save(book);
-        return book;
+        return bookDao.save(book);
     }
 
     @Override
